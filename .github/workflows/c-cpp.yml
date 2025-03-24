@@ -5,18 +5,15 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    container:
-      image: fedora:latest
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: dnf install
+    - name: Install dependencies
       run: |
-        dnf update -y
-        dnf install -y gcc make cmake glibc-static git
+        apt-get update -y
+        apt-get install -y gcc make cmake git build-essential libc6-dev
         echo $(gcc --version)
 
     - name: make
