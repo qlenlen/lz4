@@ -1,0 +1,28 @@
+name: C/C++ CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: dnf install
+      run: |
+        dnf update -y
+        dnf install -y gcc make cmake glibc-static git
+        echo $(gcc --version)
+
+    - name: make
+      run: make CFLAGS="-static -O3 -s" LDFLAGS="-static" BUILD_SHARED=""
+
+    - name: Verify static build
+      run: |
+        file lz4
+        ldd lz4 || true
