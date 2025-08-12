@@ -1,0 +1,36 @@
+name: C/C++ CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: apt install
+      run: |
+        apt-get update -y
+        apt-get install -y gcc g++ make cmake glibc-static git file
+
+    - name: Environment info
+      run: |
+        echo $(gcc --version)
+        echo $(g++ --version)
+
+    - name: make
+      run: make CFLAGS="-static -O3 -s" LDFLAGS="-static" BUILD_SHARED=""
+
+    - name: Verify static build
+      run: |
+        file lz4
+        ldd lz4 || true
+
+    - name: Upload binary
+      uses: actions/upload-artifact@v4.3.5
+      with:
+        name: lz4_static
+        path: programs/lz4
