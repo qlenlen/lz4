@@ -14,7 +14,7 @@ jobs:
     - name: apt install
       run: |
         sudo apt-get update -y
-        sudo apt-get install -y gcc g++ make cmake glibc-static git file
+        sudo apt-get install -y gcc g++ make cmake libc6-dev git file
 
     - name: Environment info
       run: |
